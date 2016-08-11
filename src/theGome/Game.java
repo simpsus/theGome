@@ -2,7 +2,9 @@ package theGome;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 public class Game {
@@ -242,6 +244,38 @@ public class Game {
 
 	}
 
+	static class GameStatistics {
+
+		Set<GameResult> results;
+
+		GameStatistics() {
+			results = new HashSet<GameResult>();
+		}
+
+		void addResult(GameResult result) {
+			results.add(result);
+		}
+
+		int getCountOfWonGames() {
+			int result = 0;
+			for (GameResult res : results) {
+				if (res.won) {
+					result++;
+				}
+			}
+			return result;
+		}
+
+		float getAverageRemainingCards() {
+			int totalLeft = 0;
+			for (GameResult res : results) {
+				totalLeft += res.remainingCards;
+			}
+			return (float) totalLeft / results.size();
+		}
+
+	}
+
 	static Card HUNDRET = new Card(100);
 	static Card ONE = new Card(1);
 	Deck deck;
@@ -388,17 +422,16 @@ public class Game {
 
 	public static void main(String[] args) {
 		int games = 1000;
-		int totalCardsLeft = 0;
+		GameStatistics stats = new GameStatistics();
 		for (int i = 0; i < games; i++) {
 			Game game = new Game(6, 2);
 			game.addPlayer(new GreedyActionPlayer("Simulator"));
 			game.start(5);
-			GameResult result = new GameResult(game);
-			totalCardsLeft += result.remainingCards;
-			System.out.println("Game " + i + ": " + result.game.reason);
+			stats.addResult(new GameResult(game));
 		}
-		System.out.println("Total Cards left: " + totalCardsLeft);
-		System.out.println("Average " + (float) (totalCardsLeft / games * 1f));
+		System.out.println("Games Won: " + stats.getCountOfWonGames());
+		System.out.println("Average Cards Left "
+				+ stats.getAverageRemainingCards());
 	}
 
 }
