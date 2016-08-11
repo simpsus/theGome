@@ -3,7 +3,6 @@ package theGome;
 import java.util.List;
 import java.util.Random;
 
-import theGome.Game.Card;
 import theGome.Game.GameStack;
 import theGome.Game.Move;
 
@@ -47,11 +46,6 @@ public class RandomPlayer extends Player {
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public void acceptCard(Card card) {
-		hand.receive(card);
 	}
 
 }

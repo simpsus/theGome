@@ -4,8 +4,8 @@ import java.util.List;
 
 import theGome.Game.Card;
 import theGome.Game.GameStack;
-import theGome.Game.Move;
 import theGome.Game.GameStack.DIRECTION;
+import theGome.Game.Move;
 
 public class GreedyActionPlayer extends Player {
 
@@ -85,11 +85,6 @@ public class GreedyActionPlayer extends Player {
 		debug(1, "chosing Move " + nextMove);
 		counter++;
 		return nextMove;
-	}
-
-	@Override
-	public void acceptCard(Card card) {
-		hand.receive(card);
 	}
 
 }

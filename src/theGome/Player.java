@@ -52,10 +52,12 @@ public abstract class Player {
 		return !hand.isEmpty();
 	}
 
+	public void acceptCard(Card card) {
+		hand.receive(card);
+	}
+
 	public abstract void prepareMove(List<GameStack> stacks);
 
 	public abstract Move getMove();
-
-	public abstract void acceptCard(Card card);
 
 }
