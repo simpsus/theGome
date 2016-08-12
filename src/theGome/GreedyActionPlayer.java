@@ -19,7 +19,7 @@ public class GreedyActionPlayer extends Player {
 	}
 
 	@Override
-	public void prepareMove(List<GameStack> stacks) {
+	public void prepareMove(List<GameStack> stacks, int remainingCardsCount) {
 		this.stacks = stacks;
 		counter = 0;
 	}
