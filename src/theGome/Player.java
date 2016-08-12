@@ -9,15 +9,19 @@ import theGome.Game.Move;
 
 public abstract class Player {
 
-	Hand hand;
-	int cardsPerMove;
-	String name;
+	protected Hand hand;
+	protected int cardsPerMove;
+	protected String name;
 	int debug_lvl = 6;
 
 	void debug(int level, String message) {
 		if (level >= debug_lvl) {
-			System.out.println(message);
+			System.out.println(name+ ":" +message);
 		}
+	}
+
+	protected void debug(String message){
+		debug(1, message);
 	}
 
 	public String getName() {
@@ -56,7 +60,7 @@ public abstract class Player {
 		hand.receive(card);
 	}
 
-	public abstract void prepareMove(List<GameStack> stacks);
+	public abstract void prepareMove(List<GameStack> stacks, int remainingCardsInDeck);
 
 	public abstract Move getMove();
 

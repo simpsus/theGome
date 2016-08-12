@@ -1,5 +1,7 @@
 package theGome;
 
+import theGome.one_turn_optimal.OneTurnSearchPlayer;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,6 +26,10 @@ public class Game {
 
 		public boolean isBigger(Card c) {
 			return compareTo(c) > 0;
+		}
+
+		public int getNumber() {
+			return number;
 		}
 
 		public String toString() {
@@ -86,9 +92,9 @@ public class Game {
 
 	}
 
-	static class GameStack {
+	public static class GameStack {
 
-		enum DIRECTION {
+		public enum DIRECTION {
 			UP, DOWN
 		}
 
@@ -100,7 +106,15 @@ public class Game {
 			cards = new Stack<Card>();
 		}
 
-		Card peek() {
+		public DIRECTION getDirection() {
+			return direction;
+		}
+
+		public Stack<Card> getCards() {
+			return cards;
+		}
+
+		public Card peek() {
 			if (cards.size() > 0) {
 				return cards.peek();
 			}
@@ -212,6 +226,14 @@ public class Game {
 
 		void remove(Card card) {
 			cards.remove(card);
+		}
+
+		/**
+		 *
+		 * @return immutable list of current cards
+         */
+		public List<Card> getCards(){
+			return Collections.unmodifiableList(cards);
 		}
 
 		public String toString() {
@@ -337,7 +359,7 @@ public class Game {
 		while (!gameOver) {
 			boolean allPlayersBlank = true;
 			for (Player p : players) {
-				p.prepareMove(stacks);
+				p.prepareMove(stacks, deck.size());
 				debug(1, "Prepared " + p);
 				int moves = 0;
 				if (p.hasCards()) {
@@ -422,13 +444,22 @@ public class Game {
 
 	public static void main(String[] args) {
 		int games = 1000;
+		int cardsPerPlayer = 6;
+		int cardsPerTurn = 2;
+		int playerCount = 3;
 		GameStatistics stats = new GameStatistics();
 		for (int i = 0; i < games; i++) {
-			Game game = new Game(6, 2);
-			game.addPlayer(new GreedyActionPlayer("Simulator"));
+			Game game = new Game(cardsPerPlayer, cardsPerTurn);
+			for(int pl =0;pl < playerCount;pl++){
+				game.addPlayer(new OneTurnSearchPlayer("Simulator"+pl));
+			}
 			game.start(5);
 			stats.addResult(new GameResult(game));
 		}
+		System.out.println("Player Count: " + playerCount);
+		System.out.println("Cards per Player: " + cardsPerPlayer);
+		System.out.println("Cards per Turn: " + cardsPerTurn);
+		System.out.println("Games Played: " + games);
 		System.out.println("Games Won: " + stats.getCountOfWonGames());
 		System.out.println("Average Cards Left "
 				+ stats.getAverageRemainingCards());
